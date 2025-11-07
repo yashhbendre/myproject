@@ -1,0 +1,104 @@
+#include <stdio.h>
+// Function for Linear Search
+int linearsearch(int arr[], int size, int key)
+{
+for (int i = 0; i < size; i++)
+{
+if (arr[i] == key)
+return i; // found match
+}
+return -1; // not found match
+}
+// Function for Binary Search
+int binarysearch(int arr[], int size, int key)
+{
+int low = 0, high = size - 1;
+while (low <= high)
+{
+int mid = (low + high) / 2;
+if (arr[mid] == key)
+return mid; // Element found at index mid
+else if (arr[mid] < key)
+low = mid + 1; // Search in right half
+else
+high = mid - 1; // Search in left half
+}
+return -1; // Element not found
+}
+// Function to sort the array for binary search
+void sortarray(int arr[], int size)
+{
+for (int i = 0; i < size ; i++)
+{
+for (int j = i + 1; j < size; j++)
+{
+if (arr[i] > arr[j])
+{
+// Swap elements
+int temp = arr[i];
+arr[i] = arr[j];
+arr[j] = temp;
+}
+}
+}
+}
+// to print the array
+void printarray(int arr[], int size)
+{
+for (int i = 0; i < size; i++)
+printf("%d ", arr[i]);
+printf("\n");
+}
+// Main Function
+int main()
+{
+int arr[100], size, choice, key, result;
+// Input number of students
+printf("Enter the number of students: ");
+scanf("%d", &size);
+// Input the roll numbers
+printf("Enter roll numbers (unsorted):\n");
+for (int i = 0; i < size; i++) {
+printf("Roll number %d: ", i + 1);
+scanf("%d", &arr[i]);
+}
+// Menu-driven based program
+do {
+printf("\n--- Menu ---\n");
+printf("1. Linear Search\n");
+printf("2. Binary Search\n");
+printf("3. Exit\n");
+printf("Enter your choice: ");
+scanf("%d", &choice);
+switch (choice)
+{
+case 1: // Linear Search
+printf("Enter the roll number to search: ");
+scanf("%d", &key);
+result = linearsearch(arr, size, key);
+if (result != -1)
+printf("Roll number %d is attendeding the training program.\n", key);
+else
+printf("Roll number %d is not attending the training program.\n", key);
+break;
+case 2: // Binary Search
+sortarray(arr, size); // Sort before binary search
+printf("Sorted roll numbers: ");
+printarray(arr, size);
+printf("Enter the roll number to search: ");
+scanf("%d", &key);
+result = binarysearch(arr, size, key);
+if (result != -1)
+printf("Roll number %d attending the training program.\n", key);
+else
+printf("Roll number %d is not attending the training program.\n", key);
+break;
+case 3: // Exit
+printf("Exiting program.\n");
+break;
+default:
+printf("Invalid choice. Please try again.\n");
+}
+} while (choice != 3); // Repeat until user chooses to exit
+return 0;
+}
