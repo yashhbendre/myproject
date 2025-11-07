@@ -1,0 +1,49 @@
+#include<stdio.h>
+#defineMAX 100
+int graph[MAX][MAX]; // Adjacency matrix
+int visited[MAX]; // To track visited cities
+int n; // Number of cities
+// DFS function to check connectivity
+void dfs(int city) {
+visited[city] = 1;
+for (int i = 0; i<n; i++) {
+if (graph[city][i] != 0&&!visited[i]) {
+dfs(i);
+}
+}
+}
+intmain() {
+int i, j, edges, city1, city2, cost;
+printf("Enter number of cities:");
+scanf("%d",&n);
+// Initialize graph
+for (i = 0; i<n; i++) {
+for (j = 0; j<n; j++) {
+graph[i][j] = 0;
+}
+}
+printf("Enter number of flight paths:");
+scanf("%d",&edges);
+printf("Enter flight paths (city1 city2 cost):\n");
+for (i = 0; i<edges; i++) {
+scanf("%d%d%d",&city1,&city2,&cost);
+// assuming 0-based indexing for cities
+graph[city1][city2] = cost;
+graph[city2][city1] = cost; // for undirected graph
+}
+// Start DFS fromcity 0
+dfs(0);
+// Check if all cities are visited
+int connected = 1;
+for (i = 0; i<n; i++) {
+if (!visited[i]) {
+connected = 0;
+break;
+}
+}
+if (connected)
+printf("The graph is connected. All cities are reachable.\n");
+else
+printf("The graph is NOT connected. Some cities are not reachable.\n");
+return 0;
+}
