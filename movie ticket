@@ -1,0 +1,152 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct Node {
+int seat;
+int status;
+char id[20];
+struct Node* next;
+struct Node* prev;
+};
+struct Node* head = NULL;
+struct Node* tail = NULL;
+void create_list() {
+head = (struct Node*)malloc(sizeof(struct Node));
+head->seat = 1;
+head->status = 0;
+strcpy(head->id, "null");
+head->prev = NULL;
+head->next = NULL;
+tail = head;
+for (int i = 2; i <= 70; i++) {
+struct Node* p = (struct Node*)malloc(sizeof(struct Node));
+p->seat = i;
+p->status = 0;
+strcpy(p->id, "null");
+tail->next = p;
+p->prev = tail;
+tail = p;
+head->prev = tail;
+}
+}
+void display() {
+struct Node* temp = head;
+int count = 0;
+printf("\n\n******************************Movie Tickets Screen*******************************\n
+\n");
+do {
+if (temp->seat < 10)
+printf("S0%d :", temp->seat);
+else
+printf("S%d :", temp->seat);
+if (temp->status == 0)
+printf("|___| ");
+else
+printf("|_B_| ");
+count++;
+if (count % 7 == 0) printf("\n");
+temp = temp->next;
+} while (temp != head);
+}
+void book() {
+int x;
+char y[20];
+label:
+printf("\nEnter seat number to be booked (1-70): ");
+scanf("%d", &x);
+printf("Enter your ID: ");
+scanf("%s", y);
+if (x < 1 || x > 70) {
+printf("Enter correct seat number to book (1-70)\n");
+goto label;
+}
+struct Node* temp = head;
+while (temp->seat != x) {
+temp = temp->next;
+}
+if (temp->status == 1)
+printf("Seat already booked!\n");
+else {
+temp->status = 1;
+strcpy(temp->id, y);
+printf("Seat %d booked!\n", x);
+}
+}
+void cancel() {
+int x;
+char y[20];
+label1:
+printf("\nEnter seat number to cancel booking (1-70): ");
+scanf("%d", &x);
+printf("Enter your ID: ");
+scanf("%s", y);
+if (x < 1 || x > 70) {
+printf("Enter correct seat number to cancel (1-70)\n");
+goto label1;
+}
+struct Node* temp = head;
+while (temp->seat != x) {
+temp = temp->next;
+}
+if (temp->status == 0) {
+printf("Seat not booked yet!!\n");
+} else {
+if (strcmp(temp->id, y) == 0) {
+temp->status = 0;
+strcpy(temp->id, "null");
+printf("Seat Cancelled!\n");
+} else {
+printf("Wrong User ID !!! Seat cannot be cancelled!!!\n");
+}
+}
+}
+void avail() {
+struct Node* temp = head;
+int count = 0;
+printf("\n\n******************************Movie Tickets Screen*******************************\n
+\n");
+do {
+if (temp->seat < 10)
+printf("S0%d :", temp->seat);
+else
+printf("S%d :", temp->seat);
+if (temp->status == 0)
+printf("|___| ");
+else
+printf(" ");
+count++;
+if (count % 7 == 0) printf("\n");
+temp = temp->next;
+} while (temp != head);
+}
+int main() {
+create_list();
+int ch;
+char c = 'y';
+while (c == 'y') {
+display();
+printf("\n*********************WELCOME TO CINEMAX MOVIE
+THEATRE************************\n");
+printf("\n1. Display Ticket Status\n2. Book your Seat\n3. Check available Seat\n4. Cancel
+your Seat\n5. Exit\n");
+printf("\nEnter your Choice:");
+scanf("%d", &ch);
+switch (ch) {
+case 1: display();
+break;
+case 2: book();
+break;
+case 3: avail();
+break;
+case 4: cancel();
+break;
+case 5:
+break;
+default: printf("Wrong choice input\n");
+}
+printf("\nDo you want to perform any other operation? (y/n): ");
+scanf(" %c", &c);
+}
+return 0;
+}
+tail->next = head;
