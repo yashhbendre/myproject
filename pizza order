@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX 5
+#define NAME_LEN 30
+char queue[MAX][NAME_LEN];
+int front = -1, rear = -1;
+// Add order (enqueue)
+void enqueue(char order[]) {
+if (rear == MAX - 1) {
+printf("Queue is full. Cannot accept more orders.\n");
+return;
+}
+if (front == -1) front = 0;
+rear++;
+strcpy(queue[rear], order);
+printf("Order '%s' added to the queue.\n", order);
+}
+// Serve order (dequeue)
+void dequeue() {
+if (front == -1 || front > rear) {
+printf("Queue is empty. No orders to serve.\n");
+return;
+}
+printf("Order '%s' has been served.\n", queue[front]);
+front++;
+}
+// Display current orders
+void display() {
+if (front == -1 || front > rear) {
+printf("Queue is empty.\n");
+return;
+}
+printf("Current orders in queue:\n");
+printf("%d. %s\n", i - front + 1, queue[i]);
+}}
+// Main function
+int main() {
+int choice;
+char order[NAME_LEN];
+do {
+printf("\n--- Pizza Parlor Queue ---\n");
+printf("1. Add Order\n");
+printf("2. Serve Order\n");
+printf("3. View Orders\n");
+printf("4. Exit\n");
+printf("Enter choice: ");
+scanf("%d", &choice);
+getchar(); // consume newline
+switch (choice) {
+case 1:
+printf("Enter order name: ");
+fgets(order, NAME_LEN, stdin);
+order[strcspn(order, "\n")] = '\0'; // remove newline
+enqueue(order);
+break;
+case 2:
+dequeue();
+break;
+case 3:
+display();
+break;
+case 4:
+printf("Thank you! Exiting...\n");
+break;
+default:
+printf("Invalid choice. Try again.\n");
+}
+} while (choice != 4);
+return 0;
+}
+for (int i = front; i <= rear; i++) {
