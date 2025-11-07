@@ -1,0 +1,135 @@
+#include <stdio.h>
+#define SIZE 10
+struct HashTable {
+int index;
+long mobile;
+};
+// Global hash table
+struct HashTable h[SIZE];
+// Initialize hash table
+void initialize() {
+for (int i = 0; i < SIZE; i++) {
+h[i].index = i;
+h[i].mobile = -1;
+}
+}
+//Display HAsh Table
+void display() {
+printf("\nHash Table:\n");
+for (int i = 0; i < SIZE; i++) {
+printf("Index %d: %ld\n", h[i].index, h[i].mobile);
+}
+}
+//Insert telephone number by using Linear Probing
+int linearProbing(int pos) {
+int i = pos;
+do {
+if (h[i].mobile == -1)
+return i;
+i = (i + 1) % SIZE;
+} while (i != pos);
+return -1; // table is full
+}
+//Insert telephone number by using Quadratic probing
+int quadraticProbing(long key) {
+int a;
+for (int j = 0; j < SIZE; j++) {
+a = (key + (j * j)) % SIZE;
+if (h[a].mobile == -1)
+return a;
+}
+return -1; // table is full
+}
+// Insert telephone number by using Double Hashing
+int hash2(long key) {
+return 7 - (key % 7); // Make sure SIZE and 7 are relatively prime
+}
+int doubleHashing(long key) {
+int hash1 = key % SIZE;
+int hash2Val = hash2(key);
+int i = 0, newIndex;
+while (i < SIZE) {
+newIndex = (hash1 + i * hash2Val) % SIZE;
+if (h[newIndex].mobile == -1)
+return newIndex;
+i++;
+}
+return -1; // table is full
+}
+void insert(int method) {
+long key;
+int pos, newPos;
+printf("Enter mobile number to insert: ");
+scanf("%ld", &key);
+pos = key % SIZE;
+if (h[pos].mobile == -1) {
+h[pos].mobile = key;
+} else {
+if (method == 1) {
+newPos = linearProbing(pos);
+} else if (method == 2) {
+newPos = quadraticProbing(key);
+} else {
+newPos = doubleHashing(key);
+}
+if (newPos != -1) {
+h[newPos].mobile = key;
+} else {
+printf("Hash table is full, cannot insert!\n");
+}
+}
+}
+void search() {
+long key;
+int pos, found = 0;
+printf("Enter mobile number to search: ");
+scanf("%ld", &key);
+pos = key % SIZE;
+if (h[pos].mobile == key) {
+printf("Mobile number %ld found at index %d\n", key, pos);
+return;
+}
+for (int i = 0; i < SIZE; i++) {
+if (h[i].mobile == key) {
+printf("Mobile number %ld found at index %d\n", key, i);
+found = 1;
+break;
+}
+}
+if (!found) {
+printf("Mobile number %ld not found in the hash table\n", key);
+}
+}
+int main() {
+int ch, method;
+initialize();
+do {
+printf("\nMenu:\n");
+printf("1. Insert\n");
+printf("2. Display\n");
+printf("3. Search\n");
+printf("4. Exit\n");
+printf("Enter your choice: ");
+scanf("%d", &ch);
+switch (ch) {
+case 1:
+printf("Collision Methods:\n");
+printf("1. Linear Probing\n2. Quadratic Probing\n3. Double Hashing\n");
+printf("Choose collision handling method:");
+scanf("%d", &method);
+insert(method);
+break;
+case 2:
+display();
+break;
+case 3:
+search();
+break;
+case 4:
+break;
+default:
+printf("Invalid choice.\n");
+}
+} while (ch != 4);
+return 0;
+}
